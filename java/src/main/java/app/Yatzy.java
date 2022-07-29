@@ -12,6 +12,13 @@ class DiceHand implements Iterable<Integer> {
 		this.dice = new int[]{d1, d2, d3, d4, d5};
 	}
 
+	int sumOfDice(int dieValue) {
+		return stream()
+			.filter(n -> n == dieValue)
+			.mapToInt(Integer::intValue)
+			.sum();
+	}
+
 	public int getDie(int index) {
 		return dice[index];
 	}
@@ -54,31 +61,27 @@ public class Yatzy {
 	}
 
 	public static int ones(DiceHand diceHand) {
-		return sumOfDice(diceHand, 1);
+		return diceHand.sumOfDice(1);
 	}
 
 	public static int twos(DiceHand diceHand) {
-		return sumOfDice(diceHand, 2);
+		return diceHand.sumOfDice(2);
 	}
 
 	public static int threes(DiceHand diceHand) {
-		return sumOfDice(diceHand, 3);
+		return diceHand.sumOfDice(3);
 	}
 
 	public static int fours(DiceHand diceHand) {
-		return sumOfDice(diceHand, 4);
+		return diceHand.sumOfDice(4);
 	}
 
 	public static int fives(DiceHand diceHand) {
-		return sumOfDice(diceHand, 5);
+		return diceHand.sumOfDice(5);
 	}
 
 	public static int sixes(DiceHand diceHand) {
-		return sumOfDice(diceHand, 6);
-	}
-
-	private static int sumOfDice(DiceHand diceHand, int dieValue) {
-		return diceHand.stream().filter(n -> n == dieValue).mapToInt(Integer::intValue).sum();
+		return diceHand.sumOfDice(6);
 	}
 
 	public static int score_pair(int d1, int d2, int d3, int d4, int d5) {
