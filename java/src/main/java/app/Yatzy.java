@@ -1,7 +1,9 @@
 package app;
 
 import java.util.Iterator;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 class DiceHand implements Iterable<Integer> {
 	private final int[] dice;
@@ -21,8 +23,9 @@ class DiceHand implements Iterable<Integer> {
 			.iterator();
 	}
 
-	public IntStream stream() {
-		return IntStream.of(dice);
+	public Stream<Integer> stream() {
+		return IntStream.of(dice)
+			.boxed();
 	}
 }
 
@@ -40,11 +43,13 @@ public class Yatzy {
 	}
 
 	public static int chance(DiceHand diceHand) {
-		return diceHand.stream().sum();
+		return diceHand.stream().mapToInt(Integer::intValue).sum();
 	}
 
 	public static int yatzy(DiceHand dice) {
-		if (dice.stream().allMatch(n -> n == dice.getDie(0))) {
+//		if (dice.stream().allMatch(n -> n == dice.getDie(0))) {
+//		if (dice.stream().distinct().count() == 1) {
+		if (dice.stream().collect(Collectors.toSet()).size() == 1) {
 			return 50;
 		}
 		return 0;
