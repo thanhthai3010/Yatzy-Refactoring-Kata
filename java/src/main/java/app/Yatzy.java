@@ -10,6 +10,10 @@ class DiceHand implements Iterable<Integer> {
 		this.dice = new int[]{d1, d2, d3, d4, d5};
 	}
 
+	public int getDie(int index) {
+		return dice[index];
+	}
+
 	// Use iterator to enhance the for loop
 	@Override
 	public Iterator<Integer> iterator() {
@@ -40,7 +44,7 @@ public class Yatzy {
 	}
 
 	public static int yatzy(DiceHand dice) {
-		if (dice.stream().allMatch(n -> n == dice.iterator().next())) {
+		if (dice.stream().allMatch(n -> n == dice.getDie(0))) {
 			return 50;
 		}
 		return 0;

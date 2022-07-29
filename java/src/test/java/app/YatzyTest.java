@@ -6,6 +6,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class YatzyTest {
+	//
 
 	@Test
 	public void chance_scores_sum_of_all_dice() {
