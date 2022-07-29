@@ -16,6 +16,11 @@ class DiceHand implements Iterable<Integer> {
 		this.dice = new int[]{d1, d2, d3, d4, d5};
 	}
 
+	public Map<Integer, Long> getCountMap() {
+		return stream()
+			.collect(groupingBy(die -> die, counting()));
+	}
+
 	int sumOfDice(int dieValue) {
 		return stream()
 			.filter(n -> n == dieValue)
@@ -88,10 +93,9 @@ public class Yatzy {
 		return diceHand.sumOfDice(6);
 	}
 
-	public static int score_pair(DiceHand diceHand) {
+	public static int scorePair(DiceHand diceHand) {
 		// TODO try Collections.frequency();
-		Map<Integer, Long> diceCounts = diceHand.stream()
-			.collect(groupingBy(dice -> dice, counting()));
+		Map<Integer, Long> diceCounts = diceHand.getCountMap();
 		OptionalInt maxDie = diceCounts.entrySet().stream()
 			.filter(entry -> entry.getValue() >= 2)
 			.mapToInt(Map.Entry::getKey)
@@ -99,9 +103,8 @@ public class Yatzy {
 		return maxDie.orElse(0) * 2;
 	}
 
-	public static int two_pair(DiceHand diceHand) {
-		Map<Integer, Long> diceCounts = diceHand.stream()
-			.collect(groupingBy(dice -> dice, counting()));
+	public static int twoPair(DiceHand diceHand) {
+		Map<Integer, Long> diceCounts = diceHand.getCountMap();
 		List<Integer> diceTwoOrMore = diceCounts.entrySet().stream()
 			.filter(entry -> entry.getValue() >= 2)
 			.map(Map.Entry::getKey)
@@ -114,29 +117,20 @@ public class Yatzy {
 		return 0;
 	}
 
-	public static int four_of_a_kind(int _1, int _2, int d3, int d4, int d5) {
-		int[] tallies;
-		tallies = new int[6];
-		tallies[_1 - 1]++;
-		tallies[_2 - 1]++;
-		tallies[d3 - 1]++;
-		tallies[d4 - 1]++;
-		tallies[d5 - 1]++;
-		for (int i = 0; i < 6; i++)
-			if (tallies[i] >= 4) return (i + 1) * 4;
-		return 0;
+	public static int threeOfAKind(DiceHand diceHand) {
+		return nOfAKind(diceHand, 3);
 	}
 
-	public static int three_of_a_kind(int d1, int d2, int d3, int d4, int d5) {
-		int[] t;
-		t = new int[6];
-		t[d1 - 1]++;
-		t[d2 - 1]++;
-		t[d3 - 1]++;
-		t[d4 - 1]++;
-		t[d5 - 1]++;
-		for (int i = 0; i < 6; i++)
-			if (t[i] >= 3) return (i + 1) * 3;
+	public static int fourOfAKind(DiceHand diceHand) {
+		return nOfAKind(diceHand, 4);
+	}
+
+	private static int nOfAKind(DiceHand diceHand, int n) {
+		for (Map.Entry<Integer, Long> entry : diceHand.getCountMap().entrySet()) {
+			if (entry.getValue() >= n) {
+				return entry.getKey() * n;
+			}
+		}
 		return 0;
 	}
 
