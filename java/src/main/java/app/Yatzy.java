@@ -1,9 +1,13 @@
 package app;
 
 import java.util.Iterator;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.Map;
+import java.util.OptionalInt;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.*;
 
 class DiceHand implements Iterable<Integer> {
 	private final int[] dice;
@@ -54,7 +58,7 @@ public class Yatzy {
 	public static int yatzy(DiceHand dice) {
 //		if (dice.stream().allMatch(n -> n == dice.getDie(0))) {
 //		if (dice.stream().distinct().count() == 1) {
-		if (dice.stream().collect(Collectors.toSet()).size() == 1) {
+		if (dice.stream().collect(toSet()).size() == 1) {
 			return 50;
 		}
 		return 0;
@@ -84,35 +88,30 @@ public class Yatzy {
 		return diceHand.sumOfDice(6);
 	}
 
-	public static int score_pair(int d1, int d2, int d3, int d4, int d5) {
-		int[] counts = new int[6];
-		counts[d1 - 1]++;
-		counts[d2 - 1]++;
-		counts[d3 - 1]++;
-		counts[d4 - 1]++;
-		counts[d5 - 1]++;
-		int at;
-		for (at = 0; at != 6; at++)
-			if (counts[6 - at - 1] >= 2) return (6 - at) * 2;
-		return 0;
+	public static int score_pair(DiceHand diceHand) {
+		// TODO try Collections.frequency();
+		Map<Integer, Long> diceCounts = diceHand.stream()
+			.collect(groupingBy(dice -> dice, counting()));
+		OptionalInt maxDie = diceCounts.entrySet().stream()
+			.filter(entry -> entry.getValue() >= 2)
+			.mapToInt(Map.Entry::getKey)
+			.max();
+		return maxDie.orElse(0) * 2;
 	}
 
-	public static int two_pair(int d1, int d2, int d3, int d4, int d5) {
-		int[] counts = new int[6];
-		counts[d1 - 1]++;
-		counts[d2 - 1]++;
-		counts[d3 - 1]++;
-		counts[d4 - 1]++;
-		counts[d5 - 1]++;
-		int n = 0;
-		int score = 0;
-		for (int i = 0; i < 6; i += 1)
-			if (counts[6 - i - 1] >= 2) {
-				n++;
-				score += (6 - i);
-			}
-		if (n == 2) return score * 2;
-		else return 0;
+	public static int two_pair(DiceHand diceHand) {
+		Map<Integer, Long> diceCounts = diceHand.stream()
+			.collect(groupingBy(dice -> dice, counting()));
+		List<Integer> diceTwoOrMore = diceCounts.entrySet().stream()
+			.filter(entry -> entry.getValue() >= 2)
+			.map(Map.Entry::getKey)
+			.collect(toList());
+		if (diceTwoOrMore.size() >= 2) {
+			return diceTwoOrMore.stream()
+				.mapToInt(Integer::intValue)
+				.sum() * 2;
+		}
+		return 0;
 	}
 
 	public static int four_of_a_kind(int _1, int _2, int d3, int d4, int d5) {
