@@ -65,6 +65,18 @@ public class Yatzy {
 		return sumOfDice(diceHand, 3);
 	}
 
+	public static int fours(DiceHand diceHand) {
+		return sumOfDice(diceHand, 4);
+	}
+
+	public static int fives(DiceHand diceHand) {
+		return sumOfDice(diceHand, 5);
+	}
+
+	public static int sixes(DiceHand diceHand) {
+		return sumOfDice(diceHand, 6);
+	}
+
 	private static int sumOfDice(DiceHand diceHand, int dieValue) {
 		return diceHand.stream().filter(n -> n == dieValue).mapToInt(Integer::intValue).sum();
 	}
@@ -180,32 +192,6 @@ public class Yatzy {
 
 		if (_2 && _3) return _2_at * 2 + _3_at * 3;
 		else return 0;
-	}
-
-	public int fours() {
-		int sum;
-		sum = 0;
-		for (int at = 0; at != 5; at++) {
-			if (dice[at] == 4) {
-				sum += 4;
-			}
-		}
-		return sum;
-	}
-
-	public int fives() {
-		int s = 0;
-		int i;
-		for (i = 0; i < dice.length; i++)
-			if (dice[i] == 5) s = s + 5;
-		return s;
-	}
-
-	public int sixes() {
-		int sum = 0;
-		for (int at = 0; at < dice.length; at++)
-			if (dice[at] == 6) sum = sum + 6;
-		return sum;
 	}
 }
 
