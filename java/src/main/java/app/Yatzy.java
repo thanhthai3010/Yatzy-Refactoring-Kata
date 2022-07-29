@@ -40,13 +40,8 @@ public class Yatzy {
 	}
 
 	public static int yatzy(DiceHand dice) {
-		int[] counts = new int[6];
-		for (int die : dice) {
-			counts[die - 1]++;
-		}
-		for (int i = 0; i != 6; i++) {
-			if (counts[i] == 5)
-				return 50;
+		if (dice.stream().allMatch(n -> n == dice.iterator().next())) {
+			return 50;
 		}
 		return 0;
 	}
