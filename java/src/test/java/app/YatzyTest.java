@@ -3,9 +3,14 @@ package app;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 
 public class YatzyTest {
 	//
+	@Test
+	public void dice_should_between_one_and_six() {
+		assertThrows(IllegalArgumentException.class, () -> new DiceHand(-1, 2, 3, 4, 5));
+	}
 
 	@Test
 	public void chance_scores_sum_of_all_dice() {
